@@ -1,11 +1,9 @@
 import type { Config } from "tailwindcss"
 
+const px0_10: { [key: number]: string } = { ...Array.from(Array(11)).map((_, i) => `${i}px`) }
+
 const config: Config = {
-    content: [
-        "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-        "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-        "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    ],
+    content: ["./src/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
     theme: {
         extend: {
             backgroundImage: {
@@ -15,8 +13,17 @@ const config: Config = {
             fontFamily: {
                 roboto: ["var(--roboto)"],
             },
+            container: {
+                padding: "2rem",
+            },
+            /** Arbitrary values customizing */
+            borderWidth: px0_10,
         },
     },
     plugins: [],
+    /** 기본 스타일 무효화 */
+    // corePlugins: {
+    //     preflight: false,
+    // },
 }
 export default config

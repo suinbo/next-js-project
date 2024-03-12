@@ -9,5 +9,6 @@
     "orderedImports": true,
     "bracketSpacing": true,
     "jsxBracketSameLine": true,
-    "endOfLine": "auto"
+    "endOfLine": "auto",
+    "plugins": ["prettier-plugin-tailwind"]
 }
