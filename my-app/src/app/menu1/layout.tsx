@@ -8,8 +8,12 @@ import Error from "./error"
 
 export default function RootLayout({
     children,
+    team,
+    analytics
 }: Readonly<{
     children: React.ReactNode
+    team: React.ReactNode
+    analytics: React.ReactNode
 }>) {
     const spanRefs = useRef<{ [key: number]: HTMLSpanElement | null }>({})
     const onClickLi = (item: number) => {
@@ -24,7 +28,7 @@ export default function RootLayout({
     }
 
     const Menus = () =>
-        <ul className="h-[95%] flex flex-col gap-5 overflow-scroll overflow-x-hidden">
+        <ul className="h-[100%] flex flex-col gap-5 overflow-scroll overflow-x-hidden">
             {[...Array(40)].map((_, index) => (
                 <li key={index} className="flex flex-col font-semibold cursor-pointer" onClick={() => onClickLi(index)}>
                     {`Menu ${index + 1}`}
@@ -48,14 +52,23 @@ export default function RootLayout({
                 </header>
 
                 {/** Navagation */}
-                <nav className="p-8 absolute h-[100vh] w-1/5 bg-slate-100">
+                <nav className="p-8 absolute h-[calc(100vh-48px)] w-1/5 bg-slate-100">
                     <Menus />
                 </nav>
 
                 {/** Content */}
                 <Suspense fallback={<Loading/>}>
-                    <div className="absolute h-[calc(100vh-48px)] w-4/5 left-[calc(1/5*100%)]">
-                        {children}
+                    <div className="absolute p-8 h-[calc(100vh-48px)] w-4/5 left-[calc(1/5*100%)]"> 
+                        <h1 className="mb-12 font-bold text-2xl">Content</h1>
+                        <div className="flex flex-col justify-between h-[calc(100vh-180px)]">
+                            <div className="flex h-[25%]">
+                                {children}
+                            </div>
+                            <div className="flex h-[65%]">
+                                {team}
+                                {analytics}
+                            </div>
+                        </div>
                     </div>
                 </Suspense>
             </div>
