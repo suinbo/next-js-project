@@ -1,16 +1,29 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function Home() {
+    // 활성 링크 확인
+    const pathname = usePathname()
+    //const router = useRouter() 
+
     const Menus = () => 
-        ["Home", "Template 1", "Template 2", "Template 3"].map(item =>  
+        [
+            { menu: "Home", url: "/" },
+            { menu: "Template 1", url: "/menu1" },
+            { menu: "Template 2", url: "/menu2" },
+            { menu: "Template 3", url: "/menu3" },
+        ].map(({ menu, url }) =>  
             <Link
-                key={item}
-                className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"  
-                href="/"
+                prefetch
+                key={menu}
+                className={`${pathname === url ? "active" : ""} group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30`}  
+                href={url}
             >
                 <h2 className="mb-3 text-2xl font-semibold">
-                    {item}
+                    {menu}
                 </h2>
                 <p className="m-0 max-w-[30ch] text-sm opacity-50">
                     Find in-depth information about Next.js features and API.
@@ -39,6 +52,7 @@ export default function Home() {
                             width={100}
                             height={24}
                             priority
+                            //onClick={() => router.push("/menu1")} /** 경로 이동 */
                         />
                     </a>
                 </div>

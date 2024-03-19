@@ -12,6 +12,7 @@ const roboto = Roboto({
     subsets: ["latin"], // preload에 사용할 subsets(필수 지정)
     weight: ["100", "400", "700"],
     variable: "--roboto", // CSS 변수 방식으로 스타일 지정
+    fallback: ['system-ui', 'arial']
 })
 
 export const metadata: Metadata = {
