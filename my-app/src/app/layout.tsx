@@ -25,8 +25,18 @@ export default function RootLayout({
     }: Readonly<{
         children: React.ReactNode
     }>) {
+
+    // 외부 리소스 preload
+    // ReactDOM.preload(
+    //     "//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css",
+    //     { as: "stylesheet" as PreloadAs },
+    //     )
+   
     return (
         <html lang="ko">
+            <head>
+                <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css"/>
+            </head>
             <body className={cx(notoSansKr.className, roboto.variable)}>
                 {children}
             </body>
