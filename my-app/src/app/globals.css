@@ -38,16 +38,16 @@ button {
 /** 스타일 재정의 */
 @layer base {
     *::-webkit-scrollbar {
-        width: 3px;
+        width: 2px;
     }
 
     *::-webkit-scrollbar-track {
-        background: rgba(var(--background-start-rgb), 0.5);
+        background: rgba(var(--background-start-rgb), 0.1);
         border-radius: 10px;
     }
 
     *::-webkit-scrollbar-thumb {
-        background-color: rgba(var(--foreground-rgb), 0.05);
+        background-color: rgba(var(--background-end-rgb), 0.2);
         border-radius: 10px;
     }
 }
