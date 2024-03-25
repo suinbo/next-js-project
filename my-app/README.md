@@ -1,7 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Project
-- Framework: `Next.js` +  `Tailwind CSS`
+- Framework: `Next.js` + `Tailwind CSS`
+- Library: 
+    - `chart.js`
+    - `react-chartjs-2` 
+    -  `react-error-boundary`
 - Description: 대시보드 레이아웃 프로젝트
 
 ## Getting Started
