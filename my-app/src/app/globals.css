@@ -42,7 +42,8 @@ button {
     }
 
     *::-webkit-scrollbar-track {
-        background: rgba(var(--background-start-rgb), 0.1);
+        /* background: rgba(var(--background-start-rgb), 0.1); */
+        background: transparent;
         border-radius: 10px;
     }
 
