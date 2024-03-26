@@ -4,7 +4,7 @@ import Widget from "@/app/_component/Widget"
 import { transactions } from "@/app/_mocks/constant"
 import { addCommaOnNum } from "@/app/_utils/constant"
 import { chatbot, person } from "@/asset/images"
-import Image from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { useRef, useState } from "react"
 
 export default function Aside() {
@@ -33,6 +33,14 @@ export default function Aside() {
         ))
     }
 
+    const ImageElement = ({ src, alt }: { src: StaticImageData; alt: string }) => (
+        <Image
+            src={src}
+            alt={alt}
+            className="relative left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] transform"
+        />
+    )
+
     return (
         <>
             <div className="m-4 flex flex-col gap-4 text-slate-300">
@@ -44,11 +52,7 @@ export default function Aside() {
                     <div className="flex items-center gap-6">
                         <span>Suin Hwangbo</span>
                         <span className="h-[40px] w-[40px] rounded-xl bg-[#5a8df9]">
-                            <Image
-                                src={person}
-                                alt="프로필이미지"
-                                className="relative left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] transform"
-                            />
+                            <ImageElement src={person} alt="프로필이미지" />
                         </span>
                     </div>
                 </div>
@@ -70,11 +74,7 @@ export default function Aside() {
                     </div>
                 </div>
                 <div className="relative bottom-[15px] left-[326px] h-[60px] w-[60px] cursor-pointer rounded-full shadow-[0_0_8px_0_rgba(0,0,0,0.1)] shadow-slate-500/40">
-                    <Image
-                        src={chatbot}
-                        alt="챗봇"
-                        className="relative left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] transform"
-                    />
+                    <ImageElement src={chatbot} alt="챗봇" />
                 </div>
             </div>
             {openWidget && <Widget type="info" />}
