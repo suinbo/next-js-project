@@ -1,6 +1,6 @@
 "use client"
 
-import { Menus } from "@/app/_mocks/constant"
+import { menus } from "@/app/_mocks/constant"
 import { logo, profile } from "@/asset/images"
 import Image, { StaticImageData } from "next/image"
 import React, { useState } from "react"
@@ -11,10 +11,10 @@ type ActiveMenuProp = {
 }
 
 export default function Navigation() {
-    const [activeMenu, setActiveMenu] = useState<ActiveMenuProp>(Menus[0])
+    const [activeMenu, setActiveMenu] = useState<ActiveMenuProp>(menus[0])
 
     const MenuList = () =>
-        Menus.map(item => {
+        menus.map(item => {
             const isActive = activeMenu.id == item.id
 
             return (

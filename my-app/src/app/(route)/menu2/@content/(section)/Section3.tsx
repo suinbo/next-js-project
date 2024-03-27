@@ -1,17 +1,33 @@
+import Selectbox, { SelectorItem } from "@/app/_component/Selectbox"
+import { selectboxItems } from "@/app/_mocks/constant"
+import { useRef, useState } from "react"
 import { Line } from "react-chartjs-2"
 
 export default function Section3() {
+    const selectionsRef = useRef<HTMLDivElement>(null)
+    const [active, setActive] = useState<boolean>(false)
+    const [selectedItem, setSelectedItem] = useState<SelectorItem>(selectboxItems[0])
+
     return (
         <section>
             <div className="m-3 rounded-3xl bg-[#292e54] p-8">
                 <div className="flex justify-between gap-8">
                     <span className="font-bold">Basic Line Chart</span>
-                    <span className="flex cursor-pointer items-center gap-10 text-slate-400">
-                        <span className="text-sm">Selections</span>
-                        <span>
-                            <i className="xi-angle-down-min xi-x hover:text-slate-200"></i>
+                    <div
+                        ref={selectionsRef}
+                        className="flex cursor-pointer items-center gap-10 text-slate-400 hover:text-slate-200">
+                        <span
+                            className="text-sm"
+                            onClick={e => {
+                                e.stopPropagation()
+                                setActive(!active)
+                            }}>
+                            {selectedItem.name}
                         </span>
-                    </span>
+                        <span>
+                            <i className="xi-angle-down-min xi-x"></i>
+                        </span>
+                    </div>
                 </div>
                 <div className="h-[170px]">
                     <Line
@@ -55,6 +71,18 @@ export default function Section3() {
                     />
                 </div>
             </div>
+            {active && (
+                <Selectbox
+                    items={selectboxItems}
+                    setActive={setActive}
+                    setSelectedItem={setSelectedItem}
+                    style={{
+                        top: (selectionsRef.current?.offsetTop ?? 0) + 30,
+                        left: (selectionsRef.current?.offsetLeft ?? 0) - 40,
+                        width: (selectionsRef.current?.clientWidth ?? 0) + 40,
+                    }}
+                />
+            )}
         </section>
     )
 }
