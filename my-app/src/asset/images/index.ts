@@ -5,5 +5,6 @@ import app from "./app.png"
 import setting from "./setting.png"
 import person from "./person.png"
 import chatbot from "./chatbot.png"
+import visa from "./visa.png"
 
-export { logo, profile, group, app, setting, person, chatbot }
+export { logo, profile, group, app, setting, person, chatbot, visa }

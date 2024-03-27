@@ -3,7 +3,7 @@
 import Widget from "@/app/_component/Widget"
 import { transactions } from "@/app/_mocks/constant"
 import { addCommaOnNum } from "@/app/_utils/constant"
-import { chatbot, person } from "@/asset/images"
+import { chatbot, person, visa } from "@/asset/images"
 import Image, { StaticImageData } from "next/image"
 import { useRef, useState } from "react"
 
@@ -33,7 +33,7 @@ export default function Aside() {
         ))
     }
 
-    const ImageElement = ({ src, alt }: { src: StaticImageData; alt: string }) => (
+    const ImageElement = ({ src, alt, customStyle }: { src: StaticImageData; alt: string; customStyle?: string }) => (
         <Image
             src={src}
             alt={alt}
@@ -56,9 +56,12 @@ export default function Aside() {
                         </span>
                     </div>
                 </div>
-                <div className="m-3 rounded-3xl bg-gradient-to-br from-[#fba4ac] to-[#8099e6] p-8 text-blue-50">
+                <div className="m-3 rounded-3xl bg-gradient-to-br from-[#fba4ac] via-[#c3a0f1] to-[#7a95e7] p-8 text-blue-50">
                     <div className="flex flex-col gap-8">
-                        <div>ID 123.456.789</div>
+                        <div className="flex items-start justify-between">
+                            <span>ID 123.456.789</span>
+                            <Image src={visa} alt="비자카드" className="absolute right-[70px] opacity-55" />
+                        </div>
                         <div className="flex flex-col gap-2">
                             <span>Your Money</span>
                             <span className="text-3xl font-bold text-white">₩ 50,000</span>

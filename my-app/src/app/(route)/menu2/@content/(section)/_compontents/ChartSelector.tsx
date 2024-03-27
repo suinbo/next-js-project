@@ -91,10 +91,10 @@ export default function ChartSelector() {
                                     backdropColor: "transparent",
                                 },
                                 grid: {
-                                    color: "#b6b7c5",
+                                    color: "#3f4f6f",
                                 },
                                 angleLines: {
-                                    color: "#b6b7c5",
+                                    color: "#3f4f6f",
                                 },
                                 pointLabels: {
                                     color: "#b6b7c5",
@@ -159,7 +159,6 @@ export default function ChartSelector() {
                 <Scatter
                     key="scatter"
                     data={{
-                        labels: ["Value 1", "Value 2", "Value 3", "Value 4"],
                         datasets: [
                             {
                                 label: "Scatter Dataset",
