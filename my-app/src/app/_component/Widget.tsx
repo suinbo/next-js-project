@@ -6,13 +6,28 @@ export default function Widget({ type }: { type: WidgetType }) {
         chat: `w-[386px] top-[40px]`,
     }
 
+    const textColor: { [key: number]: { li: string; span: string } } = {
+        1: {
+            li: "text-slate-400",
+            span: "text-[#415786]",
+        },
+        0: {
+            li: "border border-[#363c69] text-slate-200",
+            span: "text-[#536da5]",
+        },
+    }
+
     const AlarmList = () =>
-        [...Array(40)].map((_, index) => (
-            <li key={index} className="mb-3 flex flex-col rounded-lg border border-[#363c69] p-5">
-                Description ...
-                <span className="mt-3 text-xs text-[#536da5]">2024-03-26 18:00:00</span>
-            </li>
-        ))
+        [...Array(40)].map((_, index) => {
+            const { li, span } = textColor[Number(index > 2)]
+
+            return (
+                <li key={index} className={`mb-3 flex flex-col rounded-lg p-5 ${li}`}>
+                    Description ...
+                    <span className={`mt-3 text-xs ${span}`}>2024-03-26 18:00:00</span>
+                </li>
+            )
+        })
 
     return (
         <div
