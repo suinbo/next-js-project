@@ -8,6 +8,25 @@ export default function Section3() {
     const [active, setActive] = useState<boolean>(false)
     const [selectedItem, setSelectedItem] = useState<SelectorItem>(selectboxItems[0])
 
+    const datasets: { [key: string]: any } = {
+        item1: {
+            data: [65, 59, 80, 81, 58, 60],
+            borderColor: "#82c7ff",
+        },
+        item2: {
+            data: [32, 90, 45, 12, 66, 87],
+            borderColor: "#fba4ac",
+        },
+        item3: {
+            data: [12, 60, 40, 10, 85, 30],
+            borderColor: "#ffd272",
+        },
+        item4: {
+            data: [75, 30, 58, 90, 86, 42],
+            borderColor: "#c3a0f1",
+        },
+    }
+
     return (
         <section>
             <div className="m-3 rounded-3xl bg-[#292e54] p-8">
@@ -33,14 +52,7 @@ export default function Section3() {
                     <Line
                         data={{
                             labels: ["Value 1", "Value 2", "Value 3", "Value 4", "Value 5", "Value 6"],
-                            datasets: [
-                                {
-                                    label: "count",
-                                    data: [65, 59, 80, 81, 58, 60],
-                                    borderColor: "rgb(75, 192, 192)",
-                                    tension: 0.2,
-                                },
-                            ],
+                            datasets: [{ ...datasets[selectedItem.id], tension: 0.2, label: "count" }],
                         }}
                         options={{
                             maintainAspectRatio: false, //요소의 너비에 맞게 조정
