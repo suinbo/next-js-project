@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Roboto, Noto_Sans_KR } from "next/font/google"
 import cx from "classnames"
+import { MSWComponent } from "./MSWComponent"
 import "./globals.css"
 
 const notoSansKr = Noto_Sans_KR({
@@ -12,7 +13,7 @@ const roboto = Roboto({
     subsets: ["latin"], // preload에 사용할 subsets(필수 지정)
     weight: ["100", "400", "700"],
     variable: "--roboto", // CSS 변수 방식으로 스타일 지정
-    fallback: ['system-ui', 'arial']
+    fallback: ["system-ui", "arial"],
 })
 
 export const metadata: Metadata = {
@@ -21,24 +22,23 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-        children,
-    }: Readonly<{
-        children: React.ReactNode
-    }>) {
-
+    children,
+}: Readonly<{
+    children: React.ReactNode
+}>) {
     // 외부 리소스 preload
     // ReactDOM.preload(
     //     "//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css",
     //     { as: "stylesheet" as PreloadAs },
     //     )
-   
+
     return (
         <html lang="ko">
             <head>
-                <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css"/>
+                <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css" />
             </head>
             <body className={cx(notoSansKr.className, roboto.variable)}>
-                {children}
+                <MSWComponent>{children}</MSWComponent>
             </body>
         </html>
     )
