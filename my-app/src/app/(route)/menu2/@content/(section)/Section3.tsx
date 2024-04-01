@@ -14,11 +14,11 @@ export default function Section3() {
             borderColor: "#82c7ff",
         },
         item2: {
-            data: [32, 90, 45, 12, 66, 87],
+            data: [60, 77, 64, 74, 65, 59],
             borderColor: "#fba4ac",
         },
         item3: {
-            data: [12, 60, 40, 10, 85, 30],
+            data: [52, 60, 40, 60, 85, 30],
             borderColor: "#ffd272",
         },
         item4: {
