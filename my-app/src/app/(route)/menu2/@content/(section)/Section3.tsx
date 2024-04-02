@@ -1,4 +1,4 @@
-import Selectbox, { SelectorItem } from "@/app/_component/Selectbox"
+import Selectbox, { SelectorItem } from "@/app/_components/Selectbox"
 import { selectboxItems } from "@/app/_mocks/constant"
 import { useRef, useState } from "react"
 import { Line } from "react-chartjs-2"

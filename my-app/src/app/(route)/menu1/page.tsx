@@ -1,4 +1,4 @@
-import CardList from "@/app/_component/CardList"
+import CardList from "@/app/_components/CardList"
 import React from "react"
 
 export default function Page() {
