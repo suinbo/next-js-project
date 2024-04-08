@@ -18,7 +18,7 @@ async function initMSW() {
         worker.start({
             onUnhandledRequest: "bypass",
         })
-        //worker.use(...handlers)
+        worker.use(...handlers)
     }
 }
 

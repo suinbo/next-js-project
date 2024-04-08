@@ -43,7 +43,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
     -   해결
         ```
         worker.start({
-            onUnhandledRequest: "bypass",
+            onUnhandledRequest: "bypass",  //처리되지 않은 요청을 무시하고 통과
         })
         ```
 
@@ -60,5 +60,40 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
                 ```
                 Found a redundant "worker.start()" call. Note that starting the worker while mocking is already enabled will have no effect. Consider removing this "worker.start()" call.
                 ```
+
+## Note For Study
+
+-   fetch 함수 VS react-query
+
+    ```
+    // 페이지가 마운트될 때 API 호출
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch("/api/list")
+                const data = await res.json()
+                console.log("data:: ", data)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchData()
+    }, [])
+    ```
+
+    ```
+    export const useFetch = (key: ReactQueryConfig, options?: UseQueryOptions) => {
+        return useQuery({
+        queryKey: [key],
+        queryFn: () => commonRequest({ ...key, method: "GET" }),
+        enabled: !!key,
+        retry: false,
+        ...options,
+        })
+    }
+
+    const data1 = useFetch({ url: "/api/list" })
+    ```
 
 ## Deploy on Vercel

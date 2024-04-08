@@ -1,3 +1,4 @@
+import { UseQueryOptions, useInfiniteQuery, useQuery, useSuspenseQueries } from "@tanstack/react-query"
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from "axios"
 
 export type instanceConfig = {
@@ -21,7 +22,7 @@ type HeaderConfig = {
 
 type ReactQueryConfig = {
     url?: string
-    data?: any
+    params?: any
     method?: Method
     key?: string
     headers?: HeaderConfig
@@ -71,4 +72,40 @@ export const commonRequest = async (config: ReactQueryConfig) => {
     //     //token && cookie.setItem({ key: cookie.keys.credential, value: token })
     //     return response?.data ?? []
     // })
+}
+
+/** API Request Hook */
+export const useFetch = (key: ReactQueryConfig, options?: UseQueryOptions) => {
+    return useQuery({
+        queryKey: [key],
+        queryFn: () => commonRequest({ ...key, method: "GET" }),
+        enabled: !!key,
+        retry: false,
+        ...options,
+    })
+}
+
+export const useSuspenseFetches = (keys: ReactQueryConfig[], options?: UseQueryOptions) => {
+    // useQueries와 동일
+    // V5 부터 suspense: boolean 옵션 제거
+    return useSuspenseQueries({
+        queries: keys.map(key => ({
+            queryKey: [key],
+            queryFn: () => commonRequest({ ...key, method: "GET" }),
+            retry: false,
+            ...options,
+        })),
+    })
+}
+
+export const useFetchUsers = (key: ReactQueryConfig) => {
+    return useInfiniteQuery({
+        queryKey: [key],
+        queryFn: req => commonRequest({ ...key, method: "GET", params: { page: req.pageParam } }),
+        initialPageParam: 1,
+        // 다음 페이지 유무
+        getNextPageParam: lastPageData => {
+            return lastPageData[lastPageData.length - 1].id / 10 + 1
+        },
+    })
 }

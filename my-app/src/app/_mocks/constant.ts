@@ -21,4 +21,9 @@ export const datas = [
     { place: "지하철", type: "minus", won: 1200, description: "상세 내역 3" },
     { place: "계좌입금", type: "plus", won: 6000, description: "상세 내역 4" },
     { place: "보험", type: "minus", won: 47000, description: "상세 내역 5" },
+    { place: "캐시백", type: "plus", won: 2000, description: "상세 내역 6" },
+    { place: "쇼핑", type: "minus", won: 13000, description: "상세 내역 7" },
+    { place: "지하철", type: "minus", won: 1200, description: "상세 내역 8" },
+    { place: "계좌입금", type: "plus", won: 6000, description: "상세 내역 9" },
+    { place: "보험", type: "minus", won: 47000, description: "상세 내역 10" },
 ]

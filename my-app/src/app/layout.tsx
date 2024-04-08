@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Roboto, Noto_Sans_KR } from "next/font/google"
 import cx from "classnames"
 import { MSWComponent } from "./MSWComponent"
+import Provider from "./Provider"
 import "./globals.css"
 
 const notoSansKr = Noto_Sans_KR({
@@ -31,14 +32,15 @@ export default function RootLayout({
     //     "//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css",
     //     { as: "stylesheet" as PreloadAs },
     //     )
-
     return (
         <html lang="ko">
             <head>
                 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css" />
             </head>
             <body className={cx(notoSansKr.className, roboto.variable)}>
-                <MSWComponent>{children}</MSWComponent>
+                <Provider>
+                    <MSWComponent>{children}</MSWComponent>
+                </Provider>
             </body>
         </html>
     )
