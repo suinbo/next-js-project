@@ -15,10 +15,6 @@ import SearchBox from "@/app/_components/SearchBox"
 import Section1 from "./(section)/Section1"
 import Section2 from "./(section)/Section2"
 import Section3 from "./(section)/Section3"
-import { useEffect } from "react"
-import { commonRequest } from "@/app/_utils/apis/request"
-import { initMSW } from "@/app/_mocks"
-import { worker } from "@/app/_mocks/browsers"
 
 Chart.register(
     ArcElement,
