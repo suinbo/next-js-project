@@ -11,13 +11,7 @@ export const instance = axios.create({
 })
 
 type HeaderConfig = {
-    regionCd?: string
-    langCd?: string
-    ctsLangCd?: string
-    adminId?: string
-    Authorization?: string
-    "Access-Control-Allow-Headers"?: string
-    "content-type"?: string
+    "x-api-key": string
 }
 
 type ReactQueryConfig = {
@@ -107,5 +101,15 @@ export const useFetchUsers = (key: ReactQueryConfig) => {
         getNextPageParam: lastPageData => {
             return lastPageData[lastPageData.length - 1].id / 10 + 1
         },
+    })
+}
+
+export const usePost = (key: ReactQueryConfig, options?: UseQueryOptions) => {
+    return useQuery({
+        queryKey: [key],
+        queryFn: () => commonRequest({ ...key, method: "POST", params: key.params }),
+        enabled: !!key,
+        retry: false,
+        ...options,
     })
 }
