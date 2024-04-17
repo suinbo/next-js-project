@@ -1,65 +1,94 @@
 "use client"
 
-import React, { SetStateAction, useRef, useState } from "react"
-import axios from "axios"
+import React, { SetStateAction, useEffect, useRef, useState } from "react"
+import { getSourceId, getChatAnswer } from "../pages/api/chatpdf"
+import { setLocalStorage } from "../_hooks/useLocalStorage"
 
-type ChatListProp = { type: string; question: string; answer: string }[]
+const CHAT_TYPE = {
+    QUESTION: "question",
+    ANSWER: "answer",
+}
 
-const defaultValue = [{ type: "", question: "", answer: "" }]
+type ChatListProp = { no: number; type: string; content: string }[]
+
+const defaultValue = [{ no: 0, type: CHAT_TYPE.ANSWER, content: "무엇이든 물어보세요!" }]
 
 export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetStateAction<boolean>> }) {
     const textRefs = useRef<HTMLTextAreaElement>(null)
     const [chatList, setChatList] = useState<ChatListProp>(defaultValue)
     const [file, setFile] = useState<File>()
+    const [sourceId, setSourceId] = useState<string>("")
 
-    console.log("chat:: ", chatList)
+    useEffect(() => {
+        const { no, type, content } = chatList[chatList.length - 1]
+        const question = chatList.find(chat => chat.no == no)
+        const isAnswer = type === CHAT_TYPE.ANSWER && content === "..." && question
+
+        if (isAnswer) {
+            getChatAnswer(sourceId, question.content).then(res => {
+                setChatList(prev =>
+                    prev.map(item => ({
+                        ...item,
+                        content: item.no == no && item.type == CHAT_TYPE.ANSWER ? res.content : item.content,
+                    }))
+                )
+            })
+        }
+    }, [chatList, sourceId])
 
     const Chat = ({ isAnswer = true, text }: { isAnswer?: boolean; text: string }) => {
-        return (
-            <div className="flex items-center gap-4">
-                <div
-                    key="target"
-                    className={`h-[40px] w-[40px] rounded-full ${isAnswer ? "bg-[#9f32ff]" : "bg-[#292e54]"} text-center text-xs font-bold`}>
-                    <span className="relative top-1/4">{isAnswer ? "AI" : "me"}</span>
-                </div>
-                <div
-                    key="answer"
-                    className="max-w-[310px] flex-1 text-wrap break-words rounded-xl bg-[#292e54] p-4 text-xs">
-                    {text}
-                </div>
-            </div>
-        )
+        const arr = [
+            <div
+                key="target"
+                className={`h-[40px] w-[40px] rounded-full ${isAnswer ? "bg-[#9f32ff]" : "bg-[#292e54]"} text-center text-xs font-bold`}>
+                <span className="relative top-1/4">{isAnswer ? "AI" : "me"}</span>
+            </div>,
+            <div
+                key="answer"
+                className="max-w-[310px] flex-1 text-wrap break-words rounded-xl bg-[#292e54] p-4 text-xs">
+                {text}
+            </div>,
+        ]
+
+        return <div className="flex items-center gap-4">{(isAnswer ? arr : arr.reverse()).map(item => item)}</div>
     }
 
     const ChatList = () =>
-        chatList.slice(1).map((chat, index) => {
-            return (
-                <Chat
-                    key={index}
-                    isAnswer={Boolean(chat.type == "AI")}
-                    text={Boolean(chat.type == "AI") ? chat.answer : chat.question}
-                />
-            )
+        chatList.map((chat, index) => {
+            return <Chat key={index} isAnswer={Boolean(chat.type == CHAT_TYPE.ANSWER)} text={chat.content} />
         })
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) setFile(e.target.files[0])
+    /** 파일 업로드 */
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setFile(e.target.files[0])
+
+            const formData = new FormData()
+            formData.append("file", e.target.files[0])
+
+            const { sourceId } = await getSourceId(formData)
+
+            if (sourceId) {
+                setLocalStorage(sourceId)
+                setSourceId(sourceId)
+            }
+        }
     }
 
-    const handleUpload = () => {
-        console.log("!")
-        if (!file) return
-
-        const formData = new FormData()
-        formData.append("file", file)
-
-        const options = {
-            headers: {
-                "x-api-key": "sec_FNL99KKibadikoFEEy7VmHY8CSpPtgzQ",
-            },
+    /** 채팅 입력 */
+    const handleChatting = () => {
+        const current = textRefs.current as HTMLTextAreaElement
+        if (current) {
+            if (!current.value) return
+            setChatList(prev => {
+                const no = prev[prev.length - 1].no + 1
+                return [
+                    ...prev,
+                    { no, type: CHAT_TYPE.QUESTION, content: current.value },
+                    { no, type: CHAT_TYPE.ANSWER, content: "..." },
+                ]
+            })
         }
-
-        axios.post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
     }
 
     return (
@@ -72,17 +101,16 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
             </div>
             <div className="m-3 flex">
                 <label
-                    className="flex w-full cursor-pointer items-center justify-center rounded-xl border border-solid border-slate-600 p-2 text-sm"
-                    htmlFor="inputFile"
-                    onClick={handleUpload}>
+                    className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-solid border-slate-600 p-2 text-sm"
+                    htmlFor="inputFile">
                     {!file && <i className="xi-plus-min xi-x mr-2" />}
                     <span>{file ? file.name : "Upload"}</span>
+                    {sourceId && <i className="xi-check-min"></i>}
                 </label>
                 <input id="inputFile" type="file" onChange={handleFileChange} className="hidden" />
             </div>
             <div className="m-3">
-                <div className="flex h-[534px] flex-col gap-5 overflow-scroll overflow-x-hidden pr-4">
-                    <Chat text="무엇이든 물어보세요!" />
+                <div className="flex h-[534px] flex-col gap-5 overflow-scroll overflow-x-hidden pb-16 pr-4">
                     <ChatList />
                 </div>
             </div>
@@ -91,16 +119,10 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
                     <textarea
                         ref={textRefs}
                         className="h-[114px] w-full resize-none bg-transparent text-sm"
-                        placeholder="질문을 입력해주세요."
+                        placeholder={sourceId ? "질문을 입력해주세요." : "PDF 파일을 업로드 해주세요."}
+                        disabled={!sourceId}
                     />
-                    <span
-                        onClick={() => {
-                            const current = textRefs.current as HTMLTextAreaElement
-                            if (current) {
-                                if (!current.value) return
-                                setChatList(prev => [...prev, { type: "ME", question: current.value, answer: "" }])
-                            }
-                        }}>
+                    <span onClick={handleChatting}>
                         <i className="xi-enter cursor-pointer"></i>
                     </span>
                 </div>

@@ -103,13 +103,3 @@ export const useFetchUsers = (key: ReactQueryConfig) => {
         },
     })
 }
-
-export const usePost = (key: ReactQueryConfig, options?: UseQueryOptions) => {
-    return useQuery({
-        queryKey: [key],
-        queryFn: () => commonRequest({ ...key, method: "POST", params: key.params }),
-        enabled: !!key,
-        retry: false,
-        ...options,
-    })
-}
