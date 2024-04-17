@@ -10,16 +10,12 @@ export const instance = axios.create({
     timeout: 60000,
 })
 
-type HeaderConfig = {
-    "x-api-key": string
-}
-
 type ReactQueryConfig = {
     url?: string
     params?: any
     method?: Method
     key?: string
-    headers?: HeaderConfig
+    headers?: any
 }
 
 const apiRequest = (req: instanceConfig) => {

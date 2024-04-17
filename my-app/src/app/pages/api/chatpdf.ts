@@ -45,3 +45,19 @@ export async function getChatAnswer(sourceId: string, content: string) {
         },
     })
 }
+
+/** 커스텀 훅 */
+// export const useSourceId = (req: FormData) => {
+//     const [sourceId, setSourceId] = useState(null)
+
+//     useEffect(() => {
+//         const fetchSourceId = async () => {
+//             const response = await chatPDFRequest({ url: "/v1/sources/add-file", data: req })
+//             setSourceId(response?.sourceId)
+//         }
+
+//         fetchSourceId()
+//     }, [req])
+
+//     return sourceId
+// }
