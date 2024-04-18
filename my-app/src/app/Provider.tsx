@@ -2,6 +2,7 @@
 
 import React from "react"
 import { HydrationBoundary, QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { RecoilRoot } from "recoil"
 
 export default function Provider({ children }: { children: React.ReactElement }) {
     const queryClient = new QueryClient({
@@ -13,8 +14,10 @@ export default function Provider({ children }: { children: React.ReactElement })
     })
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <HydrationBoundary>{children}</HydrationBoundary>
-        </QueryClientProvider>
+        <RecoilRoot>
+            <QueryClientProvider client={queryClient}>
+                <HydrationBoundary>{children}</HydrationBoundary>
+            </QueryClientProvider>
+        </RecoilRoot>
     )
 }

@@ -3,20 +3,17 @@
 import React, { SetStateAction, useEffect, useRef, useState } from "react"
 import { getSourceId, getChatAnswer } from "../pages/api/chatpdf"
 import { setLocalStorage } from "../_hooks/useLocalStorage"
+import { useRecoilState } from "recoil"
+import { chatListState } from "../_atom/ChatListAtom"
 
 const CHAT_TYPE = {
     QUESTION: "question",
     ANSWER: "answer",
 }
 
-type ChatListProp = { no: number; type: string; content: string }[]
-
-const defaultValue = [{ no: 0, type: CHAT_TYPE.ANSWER, content: "무엇이든 물어보세요!" }]
-
 export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetStateAction<boolean>> }) {
     const textRefs = useRef<HTMLTextAreaElement>(null)
-    const [chatList, setChatList] = useState<ChatListProp>(defaultValue)
-    const [file, setFile] = useState<File>()
+    const [{ file, chatList }, setChatList] = useRecoilState(chatListState)
     const [sourceId, setSourceId] = useState<string>("")
 
     useEffect(() => {
@@ -26,15 +23,16 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
 
         if (isAnswer) {
             getChatAnswer(sourceId, question.content).then(res => {
-                setChatList(prev =>
-                    prev.map(item => ({
+                setChatList(prev => ({
+                    ...prev,
+                    chatList: prev.chatList.map(item => ({
                         ...item,
                         content: item.no == no && item.type == CHAT_TYPE.ANSWER ? res.content : item.content,
-                    }))
-                )
+                    })),
+                }))
             })
         }
-    }, [chatList, sourceId])
+    }, [chatList, setChatList, sourceId])
 
     const Chat = ({ isAnswer = true, text }: { isAnswer?: boolean; text: string }) => {
         const arr = [
@@ -61,10 +59,9 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
     /** 파일 업로드 */
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setFile(e.target.files[0])
-
             const formData = new FormData()
             formData.append("file", e.target.files[0])
+            setChatList(prev => ({ ...prev, file: e.target.files![0] }))
 
             const { sourceId } = await getSourceId(formData)
 
@@ -80,13 +77,17 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
         const current = textRefs.current as HTMLTextAreaElement
         if (current) {
             if (!current.value) return
+
             setChatList(prev => {
-                const no = prev[prev.length - 1].no + 1
-                return [
+                const no = prev.chatList[prev.chatList.length - 1].no + 1
+                return {
                     ...prev,
-                    { no, type: CHAT_TYPE.QUESTION, content: current.value },
-                    { no, type: CHAT_TYPE.ANSWER, content: "..." },
-                ]
+                    chatList: [
+                        ...chatList,
+                        { no, type: CHAT_TYPE.QUESTION, content: current.value },
+                        { no, type: CHAT_TYPE.ANSWER, content: "..." },
+                    ],
+                }
             })
         }
     }
@@ -105,7 +106,7 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
                     htmlFor="inputFile">
                     {!file && <i className="xi-plus-min xi-x mr-2" />}
                     <span>{file ? file.name : "Upload"}</span>
-                    {sourceId && <i className="xi-check-min"></i>}
+                    {file && <i className="xi-check-min"></i>}
                 </label>
                 <input id="inputFile" type="file" onChange={handleFileChange} className="hidden" />
             </div>
@@ -119,8 +120,8 @@ export default function Chat({ setOpenChat }: { setOpenChat: React.Dispatch<SetS
                     <textarea
                         ref={textRefs}
                         className="h-[114px] w-full resize-none bg-transparent text-sm"
-                        placeholder={sourceId ? "질문을 입력해주세요." : "PDF 파일을 업로드 해주세요."}
-                        disabled={!sourceId}
+                        placeholder={file ? "질문을 입력해주세요." : "PDF 파일을 업로드 해주세요."}
+                        disabled={!file}
                     />
                     <span onClick={handleChatting}>
                         <i className="xi-enter cursor-pointer"></i>
